@@ -456,11 +456,13 @@
 			 */
 			this.pixelsToColumns = function(pixels, ceilOrFloor) {
 				if (ceilOrFloor === true) {
+					// console.log(pixels, this.curColWidth, Math.ceil(pixels / this.curColWidth));
 					return Math.ceil(pixels / this.curColWidth);
 				} else if (ceilOrFloor === false) {
+					// console.log(pixels, this.curColWidth, Math.floor(pixels / this.curColWidth));
 					return Math.floor(pixels / this.curColWidth);
 				}
-
+				// console.log(pixels, this.curColWidth, Math.round(pixels / this.curColWidth));
 				return Math.round(pixels / this.curColWidth);
 			};
 
@@ -519,56 +521,56 @@
 							};
 						};
 
-var refresh = function() {
-                            gridster.setOptions(scope.config);
+						var refresh = function() {
+              gridster.setOptions(scope.config);
 
-                            // resolve "auto" & "match" values
-                            if (gridster.width === 'auto') {
-                                gridster.curWidth = parseInt($elem.css('width')) || $elem.prop('offsetWidth');
-                            } else {
-                                gridster.curWidth = gridster.width;
-                            }
+              // resolve "auto" & "match" values
+              if (gridster.width === 'auto') {
+                gridster.curWidth = parseInt($elem.css('width')) || $elem.prop('offsetWidth');
+              } else {
+                gridster.curWidth = gridster.width;
+              }
 
-                            if(gridster.colWidth === 'auto') {
-                                gridster.curColWidth = parseInt((gridster.curWidth +(gridster.outerMargin ? -gridster.margins[1]: gridster.margins[1])) / gridster.columns);
-                            } else {
-                                gridster.curColWidth = gridster.colWidth;
-                            }
+              if(gridster.colWidth === 'auto') {
+                gridster.curColWidth = parseInt((gridster.curWidth +(gridster.outerMargin ? -gridster.margins[1]: gridster.margins[1])) / gridster.columns);
+              } else {
+                gridster.curColWidth = gridster.colWidth;
+              }
 
-                            if (typeof gridster.rowHeight === 'string') {
-                                if (gridster.rowHeight === 'match') {
-                                    gridster.curRowHeight = gridster.curColWidth;
-                                } else if (gridster.rowHeight.indexOf('*') !== -1) {
-                                    gridster.curRowHeight = gridster.curColWidth * gridster.rowHeight.replace('*', '').replace(' ', '');
-                                } else if (gridster.rowHeight.indexOf('/') !== -1) {
-                                    gridster.curRowHeight = gridster.curColWidth / gridster.rowHeight.replace('/', '').replace(' ', '');
-                                } else {
-                                    gridster.curRowHeight = gridster.rowHeight;
-                                }
+              if (typeof gridster.rowHeight === 'string') {
+                if (gridster.rowHeight === 'match') {
+                  gridster.curRowHeight = gridster.curColWidth;
+                } else if (gridster.rowHeight.indexOf('*') !== -1) {
+                  gridster.curRowHeight = gridster.curColWidth * gridster.rowHeight.replace('*', '').replace(' ', '');
+                } else if (gridster.rowHeight.indexOf('/') !== -1) {
+                  gridster.curRowHeight = gridster.curColWidth / gridster.rowHeight.replace('/', '').replace(' ', '');
+                } else {
+                  gridster.curRowHeight = gridster.rowHeight;
+                }
 
-                            }
+              }
 
-                            gridster.isMobile = gridster.mobileModeEnabled && gridster.curWidth <= gridster.mobileBreakPoint;
+              gridster.isMobile = gridster.mobileModeEnabled && gridster.curWidth <= gridster.mobileBreakPoint;
 
-                            // loop through all items and reset their CSS
-                            for (var rowIndex = 0, l = gridster.grid.length; rowIndex < l; ++rowIndex) {
-                                var columns = gridster.grid[rowIndex];
-                                if (!columns) {
-                                    continue;
-                                }
+              // loop through all items and reset their CSS
+              for (var rowIndex = 0, l = gridster.grid.length; rowIndex < l; ++rowIndex) {
+                var columns = gridster.grid[rowIndex];
+                if (!columns) {
+                  continue;
+                }
 
-                                for (var colIndex = 0, len = columns.length; colIndex < len; ++colIndex) {
-                                    if (columns[colIndex]) {
-                                        var item = columns[colIndex];
-                                        item.setElementPosition();
-                                        item.setElementSizeY();
-                                        item.setElementSizeX();
-                                    }
-                                }
-                            }
+                for (var colIndex = 0, len = columns.length; colIndex < len; ++colIndex) {
+                  if (columns[colIndex]) {
+                    var item = columns[colIndex];
+                    item.setElementPosition();
+                    item.setElementSizeY();
+                    item.setElementSizeX();
+                  }
+                }
+              }
 
-                            updateHeight();
-                    };
+              updateHeight();
+            };
 
 						// update grid items on config changes
 						scope.$watch('config', refresh, true);
@@ -802,18 +804,18 @@ var refresh = function() {
 		};
 
 		/**
-+		 * Gets an element's width
-+		 */
-+		this.getElementSizeX = function(){
-+			return (this.sizeX * this.gridster.curColWidth - this.gridster.margins[1]);
-+		};
-+
-+		/**
-+		 * Gets an element's height
-+		 */
-+		this.getElementSizeY = function(){
-+			return (this.sizeY * this.gridster.curRowHeight - this.gridster.margins[0]);
-+		};
+		 * Gets an element's width
+		 */
+		this.getElementSizeX = function(){
+			return (this.sizeX * this.gridster.curColWidth - this.gridster.margins[1]);
+		};
+
+		/**
+		 * Gets an element's height
+		 */
+		this.getElementSizeY = function(){
+			return (this.sizeY * this.gridster.curRowHeight - this.gridster.margins[0]);
+		};
 	})
 
 	.factory('GridsterDraggable', ['$document', '$timeout', '$window',
@@ -1074,9 +1076,14 @@ var refresh = function() {
 					var minHeight = gridster.curRowHeight - gridster.margins[0],
 						minWidth = gridster.curColWidth - gridster.margins[1];
 
+						// console.log(minHeight, minWidth, gridster.curRowHeight, gridster.curColWidth);
+
 					var originalWidth, originalHeight;
 
 					function mouseDown(e) {
+
+						// console.log('GridsterResizable -> ResizeHandle -> Function: mouse-down');
+
 						// Get the current mouse position.
 						lastMouseX = e.pageX;
 						lastMouseY = e.pageY;
@@ -1100,6 +1107,14 @@ var refresh = function() {
 					}
 
 					function resizeStart(e) {
+
+						minHeight = gridster.curRowHeight - gridster.margins[0];
+						minWidth = gridster.curColWidth - gridster.margins[1];
+
+						// console.log('GridsterResizable -> ResizeHandle -> Function: resize-start');
+
+						scope.$broadcast('resize-start');
+
 						$el.addClass('gridster-item-moving');
 
 						gridster.movingItem = item;
@@ -1118,6 +1133,9 @@ var refresh = function() {
 					}
 
 					function mouseMove(e) {
+
+						// console.log('GridsterResizable -> ResizeHandle -> Function: mouse-move');
+
 						var maxLeft = gridster.curWidth - 1;
 
 						// Get the current mouse position.
@@ -1194,6 +1212,9 @@ var refresh = function() {
 					}
 
 					function mouseUp(e) {
+
+						// console.log('GridsterResizable -> ResizeHandle -> Function: mouse-up');
+
 						$document.off('mouseup', mouseUp);
 						$document.off('mousemove', mouseMove);
 
@@ -1203,6 +1224,9 @@ var refresh = function() {
 					}
 
 					function resize(e) {
+
+						// console.log('GridsterResizable -> ResizeHandle -> Function: resize');
+
 						var oldRow = item.row,
 							oldCol = item.col,
 							oldSizeX = item.sizeX,
@@ -1232,6 +1256,11 @@ var refresh = function() {
 					}
 
 					function resizeStop(e) {
+
+						// console.log('GridsterResizable -> ResizeHandle -> Function: resize-stop');
+
+						scope.$broadcast('resize-stop');
+
 						$el.removeClass('gridster-item-moving');
 
 						gridster.movingItem = null;
@@ -1250,6 +1279,9 @@ var refresh = function() {
 					var $dragHandle = null;
 
 					this.enable = function() {
+
+						// console.log('GridsterResizable -> ResizeHandle -> Method: enable');
+
 						if (!$dragHandle) {
 							$dragHandle = angular.element('<div class="gridster-item-resizable-handler handle-' + hClass + '"></div>');
 							$el.append($dragHandle);
@@ -1258,6 +1290,9 @@ var refresh = function() {
 					};
 
 					this.disable = function() {
+
+						// console.log('GridsterResizable -> ResizeHandle -> Method: disable');
+
 						if ($dragHandle) {
 							$dragHandle.off('mousedown', mouseDown);
 							$dragHandle.remove();
@@ -1268,6 +1303,9 @@ var refresh = function() {
 					};
 
 					this.destroy = function() {
+
+						// console.log('GridsterResizable -> ResizeHandle -> Method: destroy');
+
 						this.disable();
 					};
 				}
@@ -1284,6 +1322,9 @@ var refresh = function() {
 				}
 
 				this.enable = function() {
+
+					// console.log('GridsterResizable -> Method: enable');
+
 					if (enabled) {
 						return;
 					}
@@ -1294,6 +1335,9 @@ var refresh = function() {
 				};
 
 				this.disable = function() {
+
+					// console.log('GridsterResizable -> Method: disable');
+
 					if (!enabled) {
 						return;
 					}
@@ -1304,6 +1348,9 @@ var refresh = function() {
 				};
 
 				this.toggle = function(enabled) {
+
+					// console.log('GridsterResizable -> Method: toggle');
+
 					if (enabled) {
 						this.enable();
 					} else {
@@ -1312,6 +1359,9 @@ var refresh = function() {
 				};
 
 				this.destroy = function() {
+
+					// console.log('GridsterResizable -> Method: destroy');
+
 					for (var c = 0, l = handles.length; c < l; c++) {
 						handles[c].destroy();
 					}
@@ -1468,6 +1518,7 @@ var refresh = function() {
 					$el.on(whichTransitionEvent(), function() {
 						scope.$apply(function() {
 							scope.$broadcast('gridster-item-transition-end');
+							// console.log('gridster-item-transition-end');
 						});
 					});
 
